@@ -1,34 +1,71 @@
-// 30/01/2024
-
-// Pausa - Play
+// 20/03/2024
+// Instagram : Nadsuu_Santos
+// GitHub: @Nadsuus
 
 const botaoPausePlay = document.getElementById('pause-play');
 const botaoProximo = document.getElementById('proximo');
 const botaoAnterior = document.getElementById('anterior');
 
-const audioCapitulo = document.getElementById('audio-capitulo');
+const musicas = [
+    { titulo: 'Estacoes' },
+    { artista: 'Vmz' },
+    { src: 'musicas/1.mp3'},
+    {imagem: 'Imagens/foto1.gif'}
+]
+
+const musica = document.getElementById('musicaAtual');
+const imagem = document.querySelector('.imagemDaMusica');
 const nomeDoAlbum = document.getElementById('nomeDoAlbum')
 const nomeDaMusica = document.getElementById('nomeDaMusica')
 
 const numeroDeMusicas = 3;
 let taTocando = 0;
-let capituloAtual = 1;
+let musicaAtual = 1;
 
-// Mudar de Musica
+// Pausa - Play ---------------------------------------------------
+// Mudar de Musica --------------------------------------------------
 function tocarFaixa() {
-    audioCapitulo.play();
+    musica.play();
     botaoPausePlay.classList.remove('bi-play-circle-fill');
     botaoPausePlay.classList.add('bi-pause-circle');
 }
 
-// Pausar Musica
+// Pausar Musica ---------------------------------------------------
 function pausarFaixa() {
-    audioCapitulo.pause();
+    musica.pause();
     botaoPausePlay.classList.remove('bi-pause-circle');
     botaoPausePlay.classList.add('bi-play-circle-fill');
 }
 
-// Controlador de Pausar e tocar
+
+//Atualização da Barra ---------------------------------------------------
+
+musica.addEventListener('timeupdate', atualizarBarra);
+
+function atualizarBarra() {
+    let barra = document.querySelector('progress');
+    barra.style.width = Math.floor((musica.currentTime / musica.duration) * 100) + "%";
+
+    let duracaoDaMusica = document.querySelector('.fim');
+    duracaoDaMusica.textContent = segundosParaMinutos(Math.floor(musica.duration));
+
+
+    let tempoDecorrido = document.querySelector('.inicio');
+    tempoDecorrido.textContent = segundosParaMinutos(Math.floor(musica.currentTime));
+
+}
+
+//Convertendo segundos para minutos -----------------------------------
+function segundosParaMinutos(segundos) {
+    let campoMinutos = Math.floor(segundos / 60);
+    let campoSegundos = segundos % 60;
+    if (campoSegundos < 10) {
+        campoSegundos = "0" + campoSegundos;
+    }
+    return campoMinutos + ':' + campoSegundos;
+}
+
+// Controlador de Pausar e tocar ---------------------------------------------------
 function tocarOuPausar() {
     if (taTocando == 0) {
         tocarFaixa();
@@ -40,44 +77,44 @@ function tocarOuPausar() {
     }
 }
 
-// Trocar nome do  album e da musica
+// Trocar nome do  album e da musica ---------------------------------------------------
 
-function trocarNomeDoAlbum() {
-    nomeDoAlbum.innerText = 'Musica ' + capituloAtual;
+function trocarNomeDaMusica() {
+    nomeDaMusica.innerText = 'Musica ' + musicaAtual;
 
 }
 
 
 botaoPausePlay.addEventListener('click', tocarOuPausar);
 
-// Passar para a proxima musica
+// Passar para a proxima musica ---------------------------------------------------
 
 function proximaMusica() {
-    if ( capituloAtual ==  numeroDeMusicas ) {
-        capituloAtual = 1;
-        } else {
-            capituloAtual++;
-        };
-    audioCapitulo.src = "./books/Edits/" + capituloAtual +  ".mp3";
-    trocarNomeDoAlbum();
+    if (musicaAtual == numeroDeMusicas) {
+        musicaAtual = 1;
+    } else {
+        musicaAtual++;
+    };
+    musica.src = "./books/Edits/" + musicaAtual + ".mp3";
+    trocarNomeDaMusica();
     tocarFaixa();
     taTocando = 1;
 }
 
-botaoProximo.addEventListener('click' , proximaMusica);
+botaoProximo.addEventListener('click', proximaMusica);
 
-//  Voltar para a musica anterior
+//  Voltar para a musica anterior ---------------------------------------------------
 
-function musicaAnterior () {
-    if (capituloAtual == 1){
-        capituloAtual = numeroDeMusicas;
-    }else{
-        capituloAtual--;
+function musicaAnterior() {
+    if (musicaAtual == 1) {
+        musicaAtual = numeroDeMusicas;
+    } else {
+        musicaAtual--;
     };
-    audioCapitulo.src = "./books/Edits/"+ capituloAtual +".mp3";
-    trocarNomeDoAlbum();
+    musica.src = "./books/Edits/" + musicaAtual + ".mp3";
+    trocarNomeDaMusica();
     tocarFaixa();
     taTocando = 1;
 };
 
-botaoAnterior.addEventListener ('click', musicaAnterior);
+botaoAnterior.addEventListener('click', musicaAnterior);
