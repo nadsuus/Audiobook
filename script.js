@@ -1,120 +1,94 @@
-// 20/03/2024
-// Instagram : Nadsuu_Santos
-// GitHub: @Nadsuus
-
+// 25/03/2024 @NADSUUS
 const botaoPausePlay = document.getElementById('pause-play');
-const botaoProximo = document.getElementById('proximo');
-const botaoAnterior = document.getElementById('anterior');
+let estado = 0;
+let indexAtual = 0;
 
-const musicas = [
-    { titulo: 'Estacoes' },
-    { artista: 'Vmz' },
-    { src: 'musicas/1.mp3'},
-    {imagem: 'Imagens/foto1.gif'}
+let musicas = [
+    { titulo: "Até a proxima", artista: "VMZ", src: "./listaDeMusicas/1.mp3", img: "Imagens/noite.gif" },
+
+    { titulo: "Vou te levar", artista: "VMZ", src: "./listaDeMusicas/2.mp3", img: "Imagens/manha.gif" },
+
+    { titulo: "te levar", artista: "VMZ", src: "./listaDeMusicas/3.mp3", img: "Imagens/tarde.gif" }
 ]
 
-const musica = document.getElementById('musicaAtual');
-const imagem = document.querySelector('.imagemDaMusica');
-const nomeDoAlbum = document.getElementById('nomeDoAlbum')
-const nomeDaMusica = document.getElementById('nomeDaMusica')
+let musica = document.querySelector('audio');
+let duracaoMusica = document.querySelector('.fim')
+let imagem = document.querySelector('.imagemMusica')
+let nomeDaMusica = document.querySelector('.nomeMusica');
+let nomeDoArtista = document.querySelector('.nomeArtista')
 
-const numeroDeMusicas = 3;
-let taTocando = 0;
-let musicaAtual = 1;
+renderizar(indexAtual);
 
-// Pausa - Play ---------------------------------------------------
-// Mudar de Musica --------------------------------------------------
-function tocarFaixa() {
+// --------------------------Eventos--------------------------------------
+document.querySelector('.botaoPlay').addEventListener('click', checarSeEstaTocando);
+musica.addEventListener('timeupdate', atualizarBarra);
+
+document.querySelector('.botaoAnterior').addEventListener('click', () => {
+    indexAtual--;
+    renderizar(indexAtual);
+    tocarMusica();
+
+    if ( indexAtual < 0) {
+        
+    }
+
+});
+
+document.querySelector('.botaoProximo').addEventListener('click', () => {
+    indexAtual++;
+    renderizar(indexAtual);
+    tocarMusica();
+});
+
+// ---------------------------FUNCOES--------------------------------------
+
+function renderizar(index) {
+    musica.setAttribute('src', musicas[index].src);
+    musica.addEventListener('loadeddata', () => {
+        nomeDaMusica.textContent = (musicas[index].titulo);
+        nomeDoArtista.textContent = (musicas[index].artista);
+        imagem.src = (musicas[index].img)
+        duracaoMusica.textContent = segundosParaMinutos(Math.floor(musica.duration));
+    })
+}
+
+function tocarMusica() {
     musica.play();
     botaoPausePlay.classList.remove('bi-play-circle-fill');
     botaoPausePlay.classList.add('bi-pause-circle');
 }
 
-// Pausar Musica ---------------------------------------------------
-function pausarFaixa() {
+function pararMusica() {
     musica.pause();
     botaoPausePlay.classList.remove('bi-pause-circle');
     botaoPausePlay.classList.add('bi-play-circle-fill');
 }
 
-
-//Atualização da Barra ---------------------------------------------------
-
-musica.addEventListener('timeupdate', atualizarBarra);
+function checarSeEstaTocando() {
+    if (estado == 0) {
+        tocarMusica();
+        estado = 1;
+    } else {
+        pararMusica();
+        estado = 0;
+    }
+}
 
 function atualizarBarra() {
     let barra = document.querySelector('progress');
-    barra.style.width = Math.floor((musica.currentTime / musica.duration) * 100) + "%";
-
-    let duracaoDaMusica = document.querySelector('.fim');
-    duracaoDaMusica.textContent = segundosParaMinutos(Math.floor(musica.duration));
-
+    barra.style.width = Math.floor((musica.currentTime / musica.duration) * 100) + '%';
 
     let tempoDecorrido = document.querySelector('.inicio');
+    duracaoMusica.textContent = segundosParaMinutos(Math.floor(musica.duration));
     tempoDecorrido.textContent = segundosParaMinutos(Math.floor(musica.currentTime));
-
 }
 
-//Convertendo segundos para minutos -----------------------------------
 function segundosParaMinutos(segundos) {
-    let campoMinutos = Math.floor(segundos / 60);
-    let campoSegundos = segundos % 60;
-    if (campoSegundos < 10) {
-        campoSegundos = "0" + campoSegundos;
+    let CampoMin = Math.floor(segundos / 60);
+    let CampSeg = segundos % 60;
+
+    if (CampSeg < 10) {
+        CampSeg = '0' + CampSeg;
     }
-    return campoMinutos + ':' + campoSegundos;
+    return CampoMin + ":" + CampSeg;
 }
-
-// Controlador de Pausar e tocar ---------------------------------------------------
-function tocarOuPausar() {
-    if (taTocando == 0) {
-        tocarFaixa();
-        taTocando = 1;
-
-    } else {
-        pausarFaixa();
-        taTocando = 0;
-    }
-}
-
-// Trocar nome do  album e da musica ---------------------------------------------------
-
-function trocarNomeDaMusica() {
-    nomeDaMusica.innerText = 'Musica ' + musicaAtual;
-
-}
-
-
-botaoPausePlay.addEventListener('click', tocarOuPausar);
-
-// Passar para a proxima musica ---------------------------------------------------
-
-function proximaMusica() {
-    if (musicaAtual == numeroDeMusicas) {
-        musicaAtual = 1;
-    } else {
-        musicaAtual++;
-    };
-    musica.src = "./books/Edits/" + musicaAtual + ".mp3";
-    trocarNomeDaMusica();
-    tocarFaixa();
-    taTocando = 1;
-}
-
-botaoProximo.addEventListener('click', proximaMusica);
-
-//  Voltar para a musica anterior ---------------------------------------------------
-
-function musicaAnterior() {
-    if (musicaAtual == 1) {
-        musicaAtual = numeroDeMusicas;
-    } else {
-        musicaAtual--;
-    };
-    musica.src = "./books/Edits/" + musicaAtual + ".mp3";
-    trocarNomeDaMusica();
-    tocarFaixa();
-    taTocando = 1;
-};
-
-botaoAnterior.addEventListener('click', musicaAnterior);
