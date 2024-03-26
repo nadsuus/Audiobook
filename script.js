@@ -17,27 +17,45 @@ let imagem = document.querySelector('.imagemMusica')
 let nomeDaMusica = document.querySelector('.nomeMusica');
 let nomeDoArtista = document.querySelector('.nomeArtista')
 
+let maximoDeMusicas = musicas.length - 1;
+
 renderizar(indexAtual);
 
 // --------------------------Eventos--------------------------------------
 document.querySelector('.botaoPlay').addEventListener('click', checarSeEstaTocando);
 musica.addEventListener('timeupdate', atualizarBarra);
+musica.addEventListener('ended', () => {
+    if (indexAtual <  maximoDeMusicas) {
+        indexAtual++;
+        } else {
+            indexAtual = 0;
+        };
+        renderizar(indexAtual);
+        musica.play();
+        });
 
 document.querySelector('.botaoAnterior').addEventListener('click', () => {
-    indexAtual--;
+    if (indexAtual === 0) {
+        indexAtual = maximoDeMusicas;
+    } else {
+        indexAtual--;
+    }
     renderizar(indexAtual);
     tocarMusica();
-
-    if ( indexAtual < 0) {
-        
-    }
-
 });
 
 document.querySelector('.botaoProximo').addEventListener('click', () => {
-    indexAtual++;
-    renderizar(indexAtual);
-    tocarMusica();
+    
+    if  (indexAtual >= maximoDeMusicas){
+        indexAtual=0;
+        renderizar(indexAtual);
+        tocarMusica();
+        } else 	{
+            indexAtual++;
+            renderizar(indexAtual);
+            tocarMusica();
+    }
+
 });
 
 // ---------------------------FUNCOES--------------------------------------
