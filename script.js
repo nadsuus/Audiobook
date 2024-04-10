@@ -11,15 +11,52 @@ let musicas = [
     { titulo: "te levar", artista: "VMZ", src: "./listaDeMusicas/3.mp3", img: "Imagens/tarde.gif" }
 ]
 
+// Seleciona a lista de reprodução (playlist)
+const playlist = document.getElementById('playlist');
+
+// Função para adicionar uma música à lista de reprodução
+function adicionarMusica(musica, index) {
+    // Cria um novo elemento de lista (li)
+    const itemLista = document.createElement('li');
+    itemLista.classList.add('musica');
+
+    // Adiciona a imagem da música
+    const imagemMusica = document.createElement('img');
+    imagemMusica.classList.add('fotoMusica');
+    imagemMusica.src = musica.img;
+    imagemMusica.alt = 'Imagem da música';
+    itemLista.appendChild(imagemMusica);
+
+    // Adiciona o título da música
+    const tituloMusica = document.createElement('h3');
+    tituloMusica.textContent = musica.titulo;
+    itemLista.appendChild(tituloMusica);
+
+    // Adiciona a duração da música
+    const duracaoMusica = document.createElement('h3');
+    duracaoMusica.textContent = '02:45'; // Ajuste conforme necessário
+    itemLista.appendChild(duracaoMusica);
+
+    // Adiciona o elemento de lista à lista de reprodução
+    playlist.appendChild(itemLista);
+}
+
+// Adiciona todas as músicas à lista de reprodução
+musicas.forEach(adicionarMusica);
+
+
 let musica = document.querySelector('audio');
 let duracaoMusica = document.querySelector('.fim')
 let imagem = document.querySelector('.imagemMusica')
 let nomeDaMusica = document.querySelector('.nomeMusica');
+
+let nomeDaMusicaAQui =  document.querySelector('.musicaAqui')
+
 let nomeDoArtista = document.querySelector('.nomeArtista')
 
 let maximoDeMusicas = musicas.length - 1;
 
-renderizar(indexAtual);
+renderizarMusica(indexAtual);
 
 // --------------------------Eventos--------------------------------------
 document.querySelector('.botaoPlay').addEventListener('click', checarSeEstaTocando);
@@ -30,7 +67,7 @@ musica.addEventListener('ended', () => {
         } else {
             indexAtual = 0;
         };
-        renderizar(indexAtual);
+        renderizarMusica(indexAtual);
         musica.play();
         });
 
@@ -40,7 +77,7 @@ document.querySelector('.botaoAnterior').addEventListener('click', () => {
     } else {
         indexAtual--;
     }
-    renderizar(indexAtual);
+    renderizarMusica(indexAtual);
     tocarMusica();
 });
 
@@ -48,11 +85,11 @@ document.querySelector('.botaoProximo').addEventListener('click', () => {
     
     if  (indexAtual >= maximoDeMusicas){
         indexAtual=0;
-        renderizar(indexAtual);
+        renderizarMusica(indexAtual);
         tocarMusica();
         } else 	{
             indexAtual++;
-            renderizar(indexAtual);
+            renderizarMusica(indexAtual);
             tocarMusica();
     }
 
@@ -60,15 +97,26 @@ document.querySelector('.botaoProximo').addEventListener('click', () => {
 
 // ---------------------------FUNCOES--------------------------------------
 
-function renderizar(index) {
+function renderizarMusica(index) {
     musica.setAttribute('src', musicas[index].src);
     musica.addEventListener('loadeddata', () => {
         nomeDaMusica.textContent = (musicas[index].titulo);
         nomeDoArtista.textContent = (musicas[index].artista);
-        imagem.src = (musicas[index].img)
+        imagem.src = (musicas[index].img);
         duracaoMusica.textContent = segundosParaMinutos(Math.floor(musica.duration));
+
     })
 }
+
+// function renderizarLista(index) {
+
+//     musica.addEventListener('loadeddata', () => {
+//         nomeDaMusicaAQui.textContent = (musicas[index].titulo);
+//         nomeDoArtista.textContent = (musicas[index].artista);
+//         imagem.src = (musicas[index].img);
+//         duracaoMusica.textContent = segundosParaMinutos(Math.floor(musica.duration));
+
+// } }
 
 function tocarMusica() {
     musica.play();

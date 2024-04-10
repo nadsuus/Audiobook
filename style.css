@@ -33,17 +33,16 @@ main {
 
 }
 
-.player,
-.menuDeMusicas {
-  border-radius: 80px;
-  width: 400px;
-  height: 550px;
+.player,.menuDeMusicas {
   margin: 0px;
   justify-content: center;
   text-align: center;
   display: inline-flex;
   align-items: center;
   flex-direction: column;
+  background-color: var(--fundoPretoFOda);
+  padding-right: 20px 30px  20px 20px;
+  border-right: #dddddd solid 1px;
 }
 
 .fotoAlbum img {
@@ -157,3 +156,89 @@ progress::before {
 .anterior {
   color: red;
 }
+
+/* /////////////////////////////////////////////////////////// */
+
+.listaDeMusicas{
+
+background-color: var(--fundoPretoFOda);
+padding: 15px;
+float: right;
+border-radius: 12px;
+overflow: hidden;
+position: relative;
+z-index: 999;
+
+}
+
+.fotoMusica{
+
+  width: 50px;
+  height: 50px;
+
+}
+.musica{
+  display: flex;
+  background-color: #1b1b3c;
+  align-items: center;
+  font-size: 8px;
+
+}
+.titulo {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  justify-content: space-around;
+}
+
+/* //////////////////////////////////////////////////////////////////////// */
+
+.imagemAlbum {
+  border-radius: 9%;
+  box-shadow: inset -7px -7px 0 / 15px rgba(255, 255, 255, 0.8), 7px 7px 0 / 15px rgba(0,  0, 0, 0.15);
+  width: 120px;
+  height: 120px;
+}
+
+.album {
+  font-size: 10px;
+  padding-bottom: 10px;
+  background-color: var(--playerDeMusica);
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+
+
+}
+
+.albuns{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap:1rem;
+}
+
+.listaDeAlbuns{
+
+  background-color: var(--backgroundDoPlayer);
+  padding: 15px;
+  border-radius: 80px;
+  width: 400px;
+  padding-bottom: 50px;
+  }
+
+  .nomeDoAlbum{
+    font-size: 13px;
+    margin: 0px;
+    padding-left: 10px;
+  }
+  .artista {
+    font-size: 8px;
+    margin: 0px;
+    padding: 0px;
+    padding-left: 10px;
+    color: #43507a;
+  }
+
+  body {
+    background-color: whitesmoke;
+  }
